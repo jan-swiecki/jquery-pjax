@@ -241,6 +241,11 @@ function pjax(options) {
       timeout: options.timeout
     }
 
+    if(typeof options.cacheContainer !== 'undefined')
+    {
+      pjax.state.cacheContainer = options.cacheContainer;
+    }
+
     if (options.push || options.replace) {
       window.history.replaceState(pjax.state, container.title, container.url)
     }
@@ -291,6 +296,12 @@ function pjax(options) {
       fragment: options.fragment,
       timeout: options.timeout
     }
+
+    if(typeof options.cacheContainer !== 'undefined')
+    {
+      pjax.state.cacheContainer = options.cacheContainer;
+    }
+
     window.history.replaceState(pjax.state, document.title)
   }
 
@@ -370,9 +381,18 @@ function onPjaxPopstate(event) {
         // direction from the previous state.
         var direction = pjax.state.id < state.id ? 'forward' : 'back'
 
-        // Cache current container before replacement and inform the
-        // cache which direction the history shifted.
-        cachePop(direction, pjax.state.id, container.clone().contents())
+        var cacheContext;
+        console.log(pjax.state);
+        if(typeof pjax.state.cacheContainer !== 'undefined' && (cacheContext = $(pjax.state.cacheContainer)).length)
+        {
+          cachePop(direction, pjax.state.id, cacheContext.contents())
+        }
+        else
+        {
+          // Cache current container before replacement and inform the
+          // cache which direction the history shifted.
+          cachePop(direction, pjax.state.id, container.clone().contents())
+        }
       }
 
       var popstateEvent = $.Event('pjax:popstate', {
