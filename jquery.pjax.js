@@ -306,8 +306,17 @@ function pjax(options) {
 
   if (xhr.readyState > 0) {
     if (options.push && !options.replace) {
-      // Cache current container element before replacing it
-      cachePush(pjax.state.id, context.clone().contents())
+      
+      var cacheContext;
+      if(typeof options.cacheContainer !== undefined && (cacheContext = $(options.cacheContainer)).length !== 0)
+      {
+        cachePush(pjax.state.id, cacheContext.contents());
+      }
+      else
+      {
+        // Cache current container element before replacing it
+        cachePush(pjax.state.id, context.clone().contents());
+      }
 
       window.history.pushState(null, "", stripPjaxParam(options.requestUrl))
     }
