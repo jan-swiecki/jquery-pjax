@@ -382,7 +382,6 @@ function onPjaxPopstate(event) {
         var direction = pjax.state.id < state.id ? 'forward' : 'back'
 
         var cacheContext;
-        console.log(pjax.state);
         if(typeof pjax.state.cacheContainer !== 'undefined' && (cacheContext = $(pjax.state.cacheContainer)).length)
         {
           cachePop(direction, pjax.state.id, cacheContext.contents())
